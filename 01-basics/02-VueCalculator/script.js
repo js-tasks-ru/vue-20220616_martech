@@ -3,39 +3,23 @@ import { createApp, defineComponent } from './vendor/vue.esm-browser.js';
 const rootComponent = defineComponent({
   data() {
     return {
-      calcElements: {
-        leftOperand: 0,
-        rightOperand: 0,
-        operator: 'sum',
-      },
-      calcResult: 0,
+      leftOperand: 0,
+      rightOperand: 0,
+      operator: 'sum',
     };
   },
 
-  watch: {
-    calcElements: {
-      handler() {
-        this.calculate();
-      },
-      deep: true,
-    },
-  },
-
-  methods: {
+  computed: {
     calculate() {
-      switch (this.calcElements.operator) {
+      switch (this.operator) {
         case 'sum':
-          this.calcResult = this.calcElements.leftOperand + this.calcElements.rightOperand;
-          break;
+          return this.leftOperand + this.rightOperand;
         case 'subtract':
-          this.calcResult = this.calcElements.leftOperand - this.calcElements.rightOperand;
-          break;
+          return this.leftOperand - this.rightOperand;
         case 'multiply':
-          this.calcResult = this.calcElements.leftOperand * this.calcElements.rightOperand;
-          break;
+          return this.leftOperand * this.rightOperand;
         case 'divide':
-          this.calcResult = this.calcElements.leftOperand / this.calcElements.rightOperand;
-          break;
+          return this.leftOperand / this.rightOperand;
       }
     },
   },
