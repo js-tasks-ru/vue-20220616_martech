@@ -31,7 +31,7 @@ export default defineComponent({
         let dateParts = {
           year: meetupDate.getFullYear(),
           month: meetupDate.getMonth() < 10 ? '0' + (meetupDate.getMonth() + 1) : meetupDate.getMonth() + 1,
-          day: meetupDate.getDate() < 10 ? '0' + (meetupDate.getDate() + 1) : meetupDate.getDate() + 1,
+          day: meetupDate.getDate() < 10 ? '0' + meetupDate.getDate() : meetupDate.getDate(),
         };
 
         return Object.values(dateParts).join('-');
