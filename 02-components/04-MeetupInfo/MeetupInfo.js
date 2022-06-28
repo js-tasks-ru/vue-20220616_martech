@@ -18,24 +18,16 @@ export default defineComponent({
     },
   },
 
-  methods: {
-    showMeetupDate(type) {
-      if (type === 'locale') {
-        return new Date(this.date).toLocaleDateString(navigator.language, {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-        });
-      } else {
-        let meetupDate = new Date(this.date);
-        let dateParts = {
-          year: meetupDate.getFullYear(),
-          month: meetupDate.getMonth() < 10 ? '0' + (meetupDate.getMonth() + 1) : meetupDate.getMonth() + 1,
-          day: meetupDate.getDate() < 10 ? '0' + meetupDate.getDate() : meetupDate.getDate(),
-        };
-
-        return Object.values(dateParts).join('-');
-      }
+  computed: {
+    meetupISODate() {
+      return new Date(this.date).toISOString().split('T')[0];
+    },
+    meetupLocalDate() {
+      return new Date(this.date).toLocaleDateString(navigator.language, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
     },
   },
 
@@ -51,7 +43,7 @@ export default defineComponent({
     </li>
     <li>
       <img class="icon meetup-info__icon" alt="icon" src="/assets/icons/icon-cal-lg.svg"/>
-      <time :datetime="showMeetupDate('datetime')">{{ showMeetupDate('locale') }}</time>
+      <time :datetime="meetupISODate">{{ meetupLocalDate }}</time>
     </li>
     </ul>`,
 });
