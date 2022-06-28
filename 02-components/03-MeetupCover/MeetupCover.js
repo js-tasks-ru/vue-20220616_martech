@@ -12,14 +12,14 @@ export default defineComponent({
     },
   },
 
-  methods: {
-    showMeetupCover() {
+  computed: {
+    meetupCoverImage() {
       return this.image ? { '--bg-url': `url('${this.image}')` } : this.image;
     },
   },
 
   template: `
-    <div class="meetup-cover" :style="showMeetupCover()">
+    <div class="meetup-cover" :style="meetupCoverImage">
       <h1 class="meetup-cover__title">{{ title }}</h1>
     </div>`,
 });
