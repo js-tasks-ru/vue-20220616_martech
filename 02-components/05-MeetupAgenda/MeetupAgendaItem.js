@@ -12,10 +12,10 @@ export default defineComponent({
   },
 
   computed: {
-    getImgSrc() {
+    imgSrc() {
       return `/assets/icons/icon-${agendaItemIcons[this.agendaItem.type]}.svg`;
     },
-    getCustomTitle() {
+    customTitle() {
       return this.agendaItem.title ?? agendaItemDefaultTitles[this.agendaItem.type];
     },
   },
@@ -23,11 +23,11 @@ export default defineComponent({
   template: `
     <div class="agenda-item">
       <div class="agenda-item__col">
-        <img :src="getImgSrc" class="icon" :alt="agendaItem.type"/>
+        <img :src="imgSrc" class="icon" :alt="agendaItem.type"/>
       </div>
       <div class="agenda-item__col">{{ agendaItem.startsAt }} - {{ agendaItem.endsAt }}</div>
       <div class="agenda-item__col">
-        <h3 class="agenda-item__title">{{ getCustomTitle }}</h3>
+        <h3 class="agenda-item__title">{{ customTitle }}</h3>
         <p class="agenda-item__talk" v-if="agendaItem.type === 'talk'">
           <span>{{ agendaItem.speaker }}</span>
           <span class="agenda-item__dot"></span>
