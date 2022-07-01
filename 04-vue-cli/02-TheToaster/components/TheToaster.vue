@@ -1,24 +1,54 @@
 <template>
   <div class="toasts">
-    <div class="toast toast_success">
-      <ui-icon class="toast__icon" icon="check-circle" />
-      <span>Success Toast Example</span>
-    </div>
-
-    <div class="toast toast_error">
-      <ui-icon class="toast__icon" icon="alert-circle" />
-      <span>Error Toast Example</span>
-    </div>
+    <template v-for="toast in toasts" :key="toast.toastId">
+      <ui-toast
+        :type="toast.type"
+        :icon="toast.icon"
+        :toastId="toast.toastId"
+        :close-button="toast.closeButton"
+        @closeToast="removeToast($event)"
+      >
+        {{ toast.text }}
+      </ui-toast>
+    </template>
   </div>
 </template>
 
 <script>
-import UiIcon from './UiIcon.vue';
+import UiToast from './UiToast.vue';
 
 export default {
   name: 'TheToaster',
 
-  components: { UiIcon },
+  components: { UiToast },
+
+  data() {
+    return {
+      toasts: [],
+    };
+  },
+
+  methods: {
+    success(text, timeout = 5000) {
+      this.appendToast('success', 'check-circle', text, timeout, true);
+    },
+    error(text, timeout = 2500) {
+      this.appendToast('error', 'alert-circle', text, timeout);
+    },
+    key(text) {
+      this.appendToast('key', 'key', text);
+    },
+    appendToast(type, icon, text, timeout = 5000, closeButton = false) {
+      let toastId = Symbol();
+      let intervalId = setTimeout(this.removeToast, timeout, toastId);
+      this.toasts.push({ type, icon, text, toastId: toastId, intervalId, closeButton });
+    },
+    removeToast(toastId) {
+      let toastIndex = this.toasts.findIndex((item) => item.toastId === toastId);
+      clearTimeout(this.toasts[toastIndex].intervalId); // only for @closeToast
+      this.toasts.splice(toastIndex, 1);
+    },
+  },
 };
 </script>
 
@@ -57,17 +87,5 @@ export default {
 
 .toast + .toast {
   margin-top: 20px;
-}
-
-.toast__icon {
-  margin-right: 12px;
-}
-
-.toast.toast_success {
-  color: var(--green);
-}
-
-.toast.toast_error {
-  color: var(--red);
 }
 </style>
