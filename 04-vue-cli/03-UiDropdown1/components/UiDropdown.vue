@@ -1,21 +1,33 @@
 <template>
-  <div class="dropdown dropdown_opened">
-    <button type="button" class="dropdown__toggle dropdown__toggle_icon">
-      <ui-icon icon="tv" class="dropdown__icon" />
-      <span>Title</span>
+  <div class="dropdown" :class="dropdownOpened">
+    <button
+      type="button"
+      class="dropdown__toggle"
+      :class="hasIconInOptions ? 'dropdown__toggle_icon' : null"
+      @click="dropdownState = !dropdownState"
+    >
+      <ui-icon v-if="checkedOption.icon" :icon="checkedOption.icon" class="dropdown__icon" />
+      <span>{{ checkedOption.text }}</span>
     </button>
 
-    <div class="dropdown__menu" role="listbox">
-      <button class="dropdown__item dropdown__item_icon" role="option" type="button">
-        <ui-icon icon="tv" class="dropdown__icon" />
-        Option 1
-      </button>
-      <button class="dropdown__item dropdown__item_icon" role="option" type="button">
-        <ui-icon icon="tv" class="dropdown__icon" />
-        Option 2
-      </button>
+    <div v-show="dropdownState" class="dropdown__menu" role="listbox">
+      <template v-for="(option, index) in options" :key="index">
+        <button
+          class="dropdown__item"
+          :class="hasIconInOptions ? 'dropdown__item_icon' : null"
+          role="option"
+          type="button"
+          @click="checkOption(option.value)"
+        >
+          <ui-icon v-if="option.icon" :icon="option.icon" class="dropdown__icon" />
+          {{ option.text }}
+        </button>
+      </template>
     </div>
   </div>
+  <select :value="modelValue" @change="checkOption($event.target.value)">
+    <option v-for="(option, index) in options" :key="index" :value="option.value">{{ option.text }}</option>
+  </select>
 </template>
 
 <script>
@@ -25,6 +37,47 @@ export default {
   name: 'UiDropdown',
 
   components: { UiIcon },
+
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+    options: {
+      type: Array,
+      required: true,
+    },
+    modelValue: {},
+  },
+
+  emits: ['update:modelValue'],
+
+  data() {
+    return {
+      dropdownState: false,
+    };
+  },
+
+  computed: {
+    dropdownOpened() {
+      return this.dropdownState ? 'dropdown_opened' : null;
+    },
+    checkedOption() {
+      return this.modelValue
+        ? this.options.find((item) => item.value === this.modelValue)
+        : { text: this.title, icon: undefined };
+    },
+    hasIconInOptions() {
+      return this.options.find((item) => 'icon' in item) !== undefined;
+    },
+  },
+
+  methods: {
+    checkOption($event) {
+      this.$emit('update:modelValue', $event);
+      this.dropdownState = false;
+    },
+  },
 };
 </script>
 
