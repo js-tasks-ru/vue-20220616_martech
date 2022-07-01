@@ -30,13 +30,12 @@ export default defineComponent({
   },
 
   watch: {
-    meetupId() {
-      this.getMeetupData();
+    meetupId: {
+      handler() {
+        this.getMeetupData();
+      },
+      immediate: true,
     },
-  },
-
-  created() {
-    this.getMeetupData();
   },
 
   methods: {
