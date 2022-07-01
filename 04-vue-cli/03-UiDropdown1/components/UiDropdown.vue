@@ -25,7 +25,7 @@
       </template>
     </div>
   </div>
-  <select :value="modelValue" @change="checkOption($event.target.value)">
+  <select v-show="false" :value="modelValue" @change="checkOption($event.target.value)">
     <option v-for="(option, index) in options" :key="index" :value="option.value">{{ option.text }}</option>
   </select>
 </template>
