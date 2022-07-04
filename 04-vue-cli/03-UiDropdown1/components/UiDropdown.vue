@@ -11,18 +11,18 @@
     </button>
 
     <div v-show="dropdownState" class="dropdown__menu" role="listbox">
-      <template v-for="(option, index) in options" :key="index">
-        <button
-          class="dropdown__item"
-          :class="{ 'dropdown__item_icon': hasIconInOptions }"
-          role="option"
-          type="button"
-          @click="checkOption(option.value)"
-        >
-          <ui-icon v-if="option.icon" :icon="option.icon" class="dropdown__icon" />
-          {{ option.text }}
-        </button>
-      </template>
+      <button
+        v-for="(option, index) in options"
+        :key="index"
+        class="dropdown__item"
+        :class="{ 'dropdown__item_icon': hasIconInOptions }"
+        role="option"
+        type="button"
+        @click="checkOption(option.value)"
+      >
+        <ui-icon v-if="option.icon" :icon="option.icon" class="dropdown__icon" />
+        {{ option.text }}
+      </button>
     </div>
   </div>
   <select v-show="false" :value="modelValue" @change="checkOption($event.target.value)">
