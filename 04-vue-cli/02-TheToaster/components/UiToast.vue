@@ -2,7 +2,7 @@
   <div class="toast" :class="'toast_' + type">
     <ui-icon class="toast__icon" :icon="icon" />
     <span><slot /></span>
-    <ui-close-button v-if="closeButton" @click="$emit('closeToast', toastId)">x</ui-close-button>
+    <ui-close-button v-if="closeButton" @click="$emit('closeToast')">x</ui-close-button>
   </div>
 </template>
 

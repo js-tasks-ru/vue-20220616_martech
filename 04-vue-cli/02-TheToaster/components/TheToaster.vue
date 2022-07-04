@@ -7,7 +7,7 @@
       :icon="toast.icon"
       :toastId="toast.toastId"
       :close-button="toast.closeButton"
-      @closeToast="removeToast($event)"
+      @closeToast="removeToast(toast.toastId)"
     >
       {{ toast.text }}
     </ui-toast>
