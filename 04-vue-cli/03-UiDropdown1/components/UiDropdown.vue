@@ -1,9 +1,9 @@
 <template>
-  <div class="dropdown" :class="dropdownOpened">
+  <div class="dropdown" :class="{ 'dropdown_opened': dropdownState }">
     <button
       type="button"
       class="dropdown__toggle"
-      :class="hasIconInOptions ? 'dropdown__toggle_icon' : null"
+      :class="{ 'dropdown__toggle_icon': hasIconInOptions }"
       @click="dropdownState = !dropdownState"
     >
       <ui-icon v-if="checkedOption.icon" :icon="checkedOption.icon" class="dropdown__icon" />
@@ -14,7 +14,7 @@
       <template v-for="(option, index) in options" :key="index">
         <button
           class="dropdown__item"
-          :class="hasIconInOptions ? 'dropdown__item_icon' : null"
+          :class="{ 'dropdown__item_icon': hasIconInOptions }"
           role="option"
           type="button"
           @click="checkOption(option.value)"
@@ -59,9 +59,6 @@ export default {
   },
 
   computed: {
-    dropdownOpened() {
-      return this.dropdownState ? 'dropdown_opened' : null;
-    },
     checkedOption() {
       return this.modelValue
         ? this.options.find((item) => item.value === this.modelValue)
