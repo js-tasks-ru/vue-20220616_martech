@@ -1,13 +1,12 @@
 <template>
   <div class="toasts">
     <ui-toast
-      v-for="toast in toasts"
-      :key="toast.toastId"
+      v-for="(toast, index) in toasts"
+      :key="index"
       :type="toast.type"
       :icon="toast.icon"
-      :toastId="toast.toastId"
       :close-button="toast.closeButton"
-      @closeToast="removeToast(toast.toastId)"
+      @closeToast="removeToast(toast)"
     >
       {{ toast.text }}
     </ui-toast>
@@ -39,12 +38,12 @@ export default {
       this.appendToast('key', 'key', text);
     },
     appendToast(type, icon, text, timeout = 5000, closeButton = false) {
-      let toastId = Symbol();
-      let intervalId = setTimeout(this.removeToast, timeout, toastId);
-      this.toasts.push({ type, icon, text, toastId: toastId, intervalId, closeButton });
+      let toast = { type, icon, text, closeButton };
+      toast.intervalId = setTimeout(this.removeToast, timeout, toast);
+      this.toasts.push(toast);
     },
-    removeToast(toastId) {
-      let toastIndex = this.toasts.findIndex((item) => item.toastId === toastId);
+    removeToast(toast) {
+      let toastIndex = this.toasts.indexOf(toast);
       clearTimeout(this.toasts[toastIndex].intervalId); // only for @closeToast
       this.toasts.splice(toastIndex, 1);
     },

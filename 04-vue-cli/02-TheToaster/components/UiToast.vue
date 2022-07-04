@@ -27,10 +27,6 @@ export default {
       type: String,
       required: true,
     },
-    toastId: {
-      type: Symbol,
-      required: true,
-    },
     closeButton: {
       type: Boolean,
       required: false,
