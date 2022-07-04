@@ -38,7 +38,7 @@ export default {
 
   methods: {
     handleSubmit() {
-      let fromURL = this.$route.query?.from;
+      let fromURL = this.$route.query.from;
       let redirectTo = fromURL || { name: 'main' };
       this.$router.push(redirectTo);
     },
