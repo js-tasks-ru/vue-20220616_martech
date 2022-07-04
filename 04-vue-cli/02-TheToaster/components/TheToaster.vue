@@ -1,16 +1,16 @@
 <template>
   <div class="toasts">
-    <template v-for="toast in toasts" :key="toast.toastId">
-      <ui-toast
-        :type="toast.type"
-        :icon="toast.icon"
-        :toastId="toast.toastId"
-        :close-button="toast.closeButton"
-        @closeToast="removeToast($event)"
-      >
-        {{ toast.text }}
-      </ui-toast>
-    </template>
+    <ui-toast
+      v-for="toast in toasts"
+      :key="toast.toastId"
+      :type="toast.type"
+      :icon="toast.icon"
+      :toastId="toast.toastId"
+      :close-button="toast.closeButton"
+      @closeToast="removeToast($event)"
+    >
+      {{ toast.text }}
+    </ui-toast>
   </div>
 </template>
 
