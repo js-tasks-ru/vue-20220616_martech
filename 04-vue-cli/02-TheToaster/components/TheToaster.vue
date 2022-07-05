@@ -1,8 +1,8 @@
 <template>
   <div class="toasts">
     <ui-toast
-      v-for="(toast, index) in toasts"
-      :key="index"
+      v-for="toast in toasts"
+      :key="toast.id"
       :type="toast.type"
       :icon="toast.icon"
       :close-button="toast.closeButton"
@@ -38,7 +38,7 @@ export default {
       this.appendToast('key', 'key', text);
     },
     appendToast(type, icon, text, timeout = 5000, closeButton = false) {
-      let toast = { type, icon, text, closeButton };
+      let toast = { id: Symbol(), type, icon, text, closeButton };
       toast.intervalId = setTimeout(this.removeToast, timeout, toast);
       this.toasts.push(toast);
     },
