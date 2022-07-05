@@ -3,6 +3,7 @@
   <p>
     <button type="button" @click="handleSuccessClick">Add Success Message</button>
     <button type="button" @click="handleErrorClick">Add Error Message</button>
+    <button type="button" @click="handleKeyClick">Add Key Message</button>
   </p>
 </template>
 
@@ -21,6 +22,10 @@ export default {
 
     handleErrorClick() {
       this.$refs.toaster.error('Error ' + new Date().toLocaleTimeString());
+    },
+
+    handleKeyClick() {
+      this.$refs.toaster.key('Key ' + new Date().toLocaleTimeString());
     },
   },
 };
