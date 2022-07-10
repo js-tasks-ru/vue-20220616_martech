@@ -1,8 +1,20 @@
 <template>
   <div class="image-uploader">
-    <label class="image-uploader__preview image-uploader__preview-loading" style="--bg-url: url('/link.jpeg')">
-      <span class="image-uploader__text">Загрузить изображение</span>
-      <input type="file" accept="image/*" class="image-uploader__input" />
+    <label
+      class="image-uploader__preview"
+      :class="{ 'image-uploader__preview-loading': uploadPhase === 2 }"
+      :style="previewImage"
+      @click="removeUploadedFile"
+    >
+      <span class="image-uploader__text">{{ phaseMessage[uploadPhase] }}</span>
+      <input
+        ref="file"
+        v-bind="$attrs"
+        type="file"
+        accept="image/*"
+        class="image-uploader__input"
+        @change="selectFile"
+      />
     </label>
   </div>
 </template>
@@ -10,6 +22,83 @@
 <script>
 export default {
   name: 'UiImageUploader',
+
+  inheritAttrs: false,
+
+  props: {
+    preview: String,
+    uploader: Function,
+  },
+
+  emits: ['remove', 'upload', 'select', 'error'],
+
+  data() {
+    return {
+      uploadPhase: 1,
+      phaseMessage: {
+        1: 'Загрузить изображение',
+        2: 'Загрузка...',
+        3: 'Удалить изображение',
+      },
+    };
+  },
+
+  computed: {
+    previewImage() {
+      return this.preview ? `--bg-url: url('${this.preview}')` : null;
+    },
+  },
+
+  created() {
+    this.uploadPhase = this.preview ? 3 : 1;
+  },
+
+  methods: {
+    selectFile() {
+      if (this.$refs['file'].files.length) {
+        let selectedFile = this.$refs['file'].files[0];
+
+        this.$emit('select', selectedFile);
+
+        if (this.uploader) {
+          this.uploadPhase = 2;
+
+          try {
+            this.uploader(selectedFile)
+              .then((value) => {
+                this.$emit('upload', value);
+                this.uploadPhase = 3;
+              })
+              .catch((error) => {
+                this.$emit('error', error);
+                this.uploadPhase = this.preview ? 3 : 1;
+              });
+          } catch (error) {
+            this.uploadPhase = this.preview ? 3 : 1;
+            this.$emit('error', error);
+          }
+        } else {
+          this.$emit('upload', { image: URL.createObjectURL(selectedFile) });
+          this.uploadPhase = 3;
+        }
+
+        this.flushSelectedFile();
+      }
+    },
+    removeUploadedFile(e) {
+      if (this.uploadPhase === 2) {
+        e.preventDefault();
+      } else if (this.uploadPhase === 3) {
+        e.preventDefault();
+        this.uploadPhase = 1;
+        this.flushSelectedFile();
+        this.$emit('remove');
+      }
+    },
+    flushSelectedFile() {
+      this.$refs['file'].value = '';
+    },
+  },
 };
 </script>
 
