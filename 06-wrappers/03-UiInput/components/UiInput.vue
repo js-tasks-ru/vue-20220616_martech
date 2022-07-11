@@ -1,13 +1,21 @@
 <template>
-  <div class="input-group input-group_icon input-group_icon-left input-group_icon-right">
-    <div class="input-group__icon">
-      <img class="icon" alt="icon" />
+  <div class="input-group" :class="inputGroupIconClasses">
+    <div v-if="$slots['left-icon']" class="input-group__icon">
+      <slot name="left-icon"></slot>
     </div>
 
-    <input ref="input" class="form-control form-control_rounded form-control_sm" />
+    <component
+      v-bind="$attrs"
+      :is="multiline ? 'textarea' : 'input'"
+      ref="input"
+      :value="modelValue"
+      class="form-control"
+      :class="{ 'form-control_rounded': rounded, 'form-control_sm': small }"
+      @[inputEvent]="emitValue"
+    ></component>
 
-    <div class="input-group__icon">
-      <img class="icon" alt="icon" />
+    <div v-if="$slots['right-icon']" class="input-group__icon">
+      <slot name="right-icon"></slot>
     </div>
   </div>
 </template>
@@ -15,6 +23,53 @@
 <script>
 export default {
   name: 'UiInput',
+
+  inheritAttrs: false,
+
+  props: {
+    small: {
+      type: Boolean,
+      default: false,
+    },
+    rounded: {
+      type: Boolean,
+      default: false,
+    },
+    multiline: {
+      type: Boolean,
+      default: false,
+    },
+    modelValue: String,
+    modelModifiers: {
+      default: () => ({}),
+    },
+  },
+
+  emits: ['update:modelValue'],
+
+  computed: {
+    inputGroupIconClasses() {
+      return {
+        'input-group_icon': this.$slots['left-icon'] || this.$slots['right-icon'],
+        'input-group_icon-left': this.$slots['left-icon'],
+        'input-group_icon-right': this.$slots['right-icon'],
+      };
+    },
+    inputEvent() {
+      return this.modelModifiers?.lazy ? 'change' : 'input';
+    },
+  },
+
+  methods: {
+    focus() {
+      this.$refs.input.focus();
+    },
+    emitValue(e) {
+      if ((e.type === 'change' && this.modelModifiers?.lazy) || (e.type === 'input' && !this.modelModifiers?.lazy)) {
+        this.$emit('update:modelValue', e.target.value);
+      }
+    },
+  },
 };
 </script>
 
