@@ -1,6 +1,6 @@
 <template>
   <main class="mini-messenger">
-    <ul class="messages">
+    <ul ref="ul" class="messages">
       <li v-for="message in messages" :key="message.id" ref="items" class="message">
         {{ message.text }}
       </li>
@@ -29,6 +29,11 @@ export default {
         { id: lastId++, text: 'Forth message' },
       ],
     };
+  },
+
+  updated() {
+    this.$refs['ul'].scrollTop =
+      this.$refs['ul'].scrollHeight > this.$refs['ul'].offsetHeight ? this.$refs['ul'].scrollHeight : 0;
   },
 
   methods: {
